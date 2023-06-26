@@ -1,0 +1,19 @@
+{
+  "name": "quizzer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "concurrently -n \"FRONTEND, BACKEND\" -c \"blue, green\" \"npm:start:frontend\" \"npm:start:backend\" ",
+    "start:backend": "npm start --prefix backend",
+    "start:frontend": "npm start --prefix frontend"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "pg-promise": "^11.5.0"
+  }
+}

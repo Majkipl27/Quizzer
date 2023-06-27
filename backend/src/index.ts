@@ -34,7 +34,7 @@ app.get('/quizzes', async (_: any, res: any) => {
   }
 });
 
-app.get('/quizzes/:id', async (req: any, res: any) => {
+app.get('/quiz/:id', async (req: any, res: any) => {
   try {
     const quiz = await db.one('SELECT * FROM quizzes WHERE id = $1', [
       req.params.id as Number,
@@ -46,68 +46,55 @@ app.get('/quizzes/:id', async (req: any, res: any) => {
   }
 });
 
-app.post('/addquiz', async (req: any, res: any) => {
+app.post('/add', async (req, res) => {
   try {
-    const { name, description } = req.body;
+    const { name, description, avatar_id, questions } = req.body;
 
-    if (!name || !description) {
+    if (!name || !description || !questions || !Array.isArray(questions)) {
       return res.status(400).json({ error: 'Nieprawidłowe dane wejściowe.' });
     }
 
-    const quiz = await db.one(
-      'INSERT INTO quizzes (name, description) VALUES ($1, $2) RETURNING *',
-      [name as String, description as String]
-    );
+    const quizInsertQuery =
+      'INSERT INTO quizzes (name, description, avatar_id) VALUES ($1, $2, $3) RETURNING id';
+    const quizParams = [name, description, avatar_id];
 
-    res.json(quiz);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Wystąpił błąd serwera.' });
-  }
-});
+    const insertQuestionQuery =
+      'INSERT INTO quizquestions (quiz_id, question, question_type) VALUES ($1, $2, $3) RETURNING id';
+    const insertAnswerQuery =
+      'INSERT INTO questionanswers (questionid, answer, iscorrect) VALUES ($1, $2, $3) RETURNING *';
 
-app.post('/addquestions', async (req: any, res: any) => {
-  try {
-    if (
-      !req.body ||
-      !req.body.questions.every(
-        (question: any) =>
-          question.quizId &&
-          question.question &&
-          question.question_type &&
-          question.answers.every(
-            (answer: any) => answer.answer && answer.isCorrect !== undefined
-          )
-      )
-    ) {
-      return res.sendStatus(400);
-    }
+    const quizId = await db.one(quizInsertQuery, quizParams);
 
-    for (const data of req.body.questions) {
-      const { quizId, question, question_type, answers } = data;
+    for (const data of questions) {
+      const { question, question_type, answers } = data;
 
-      if (!quizId || !question || !question_type) {
+      if (
+        !question ||
+        !question_type ||
+        !answers ||
+        !Array.isArray(answers)
+      ) {
         return res.status(400).json({ error: 'Nieprawidłowe dane wejściowe.' });
       }
 
-      const lastQuestion = await db.one(
-        'INSERT INTO quizquestions (quiz_id, question, question_type) VALUES ($1, $2, $3) RETURNING id',
-        [quizId, question, question_type]
-      );
+      const lastQuestion = await db.one(insertQuestionQuery, [
+        quizId.id,
+        question,
+        question_type,
+      ]);
 
-      for (const questionAnswer of answers) {
-        const { answer, isCorrect } = questionAnswer;
-
-        if (!answer || isCorrect === undefined) {
+      for (const { answer, isCorrect } of answers) {
+        if (!answer || typeof isCorrect !== 'boolean') {
           return res
             .status(400)
             .json({ error: 'Nieprawidłowe dane wejściowe.' });
         }
 
-        await db.one(
-          'INSERT INTO questionanswers (questionid, answer, iscorrect) VALUES ($1, $2, $3) RETURNING *',
-          [lastQuestion.id, answer, `${+isCorrect}`]
-        );
+        await db.one(insertAnswerQuery, [
+          lastQuestion.id,
+          answer,
+          `${+isCorrect}`,
+        ]);
       }
     }
 
@@ -118,22 +105,36 @@ app.post('/addquestions', async (req: any, res: any) => {
   }
 });
 
-app.get('/question/:id', async (req, res) => {
+app.get('/quiz/:quizId/questions', async (req: any, res: any) => {
   try {
-    const questionId = req.params.id;
+    const quizId = req.params.quizId;
 
-    const question = await db.one('SELECT * FROM quizquestions WHERE id = $1', [
-      questionId,
-    ]);
+    if (!quizId) {
+      return res
+        .status(400)
+        .json({ error: 'Nieprawidłowy identyfikator quizu.' });
+    }
 
-    const answers = await db.any(
-      'SELECT * FROM questionanswers WHERE questionid = $1',
-      [questionId]
+    const questions = await db.any(
+      'SELECT * FROM quizquestions WHERE quiz_id = $1',
+      [quizId]
     );
 
-    question.answers = answers;
+    if (!questions || questions.length === 0) {
+      return res
+        .status(404)
+        .json({ error: 'Nie znaleziono pytań dla podanego quizu.' });
+    }
 
-    res.json(question);
+    for (const question of questions) {
+      const answers = await db.any(
+        'SELECT * FROM questionanswers WHERE questionid = $1',
+        [question.id]
+      );
+      question.answers = answers;
+    }
+
+    res.json(questions);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Wystąpił błąd serwera.' });

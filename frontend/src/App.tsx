@@ -1,7 +1,7 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Header from "./Layout/Header";
-import Button from "./Components/Button";
-import LandingPage from "./Sites/LandingPage";
+import LandingPage from "./Sites/LandingPage/LandingPage";
+import Quizzes from "./Sites/Quizzes/Quizzes";
 
 const router = createBrowserRouter([
   {
@@ -14,7 +14,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/quizzes",
-        element: <h1>quizy</h1>,
+        element: <Quizzes />,
       },
       {
         path: "/addquiz",

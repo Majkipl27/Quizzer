@@ -141,6 +141,16 @@ app.get('/quiz/:quizId/questions', async (req: any, res: any) => {
   }
 });
 
+app.get("/quizzes/newest", async (_: any, res: any) => {
+  try {
+    const quizzes = await db.any("SELECT * FROM quizzes ORDER BY id DESC LIMIT 10");
+    res.json(quizzes);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Wystąpił błąd serwera." });
+  }
+});
+
 app.listen(PORT, () => {
-  console.log(`Example app listening on port ${PORT}`);
+  console.log(`Backend listening on port ${PORT}`);
 });

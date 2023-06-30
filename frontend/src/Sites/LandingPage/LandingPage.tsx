@@ -1,7 +1,7 @@
 import classes from "./LandingPage.module.css";
-import Button from "../Components/Button";
+import Button from "../../Components/Button";
 import { useNavigate } from "react-router-dom";
-import AppLogo from "../Graphics/AppLogo.svg";
+import AppLogo from "../../Graphics/AppLogo.svg";
 
 const LandingPage = () => {
   const navigate = useNavigate();

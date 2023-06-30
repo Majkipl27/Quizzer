@@ -9,9 +9,9 @@ const Header = () => {
       <header className={classes.header}>
         <div className={classes.logo}>
           <img src={Logo.toString()} alt="Logo" />
-          <h1>
+          <h2>
             <NavLink to={"/"}>Quizzer</NavLink>
-          </h1>
+          </h2>
         </div>
         <div className={classes.nav}>
           <NavLink to={"/quizzes"} className={classes.navlink}>
@@ -21,7 +21,6 @@ const Header = () => {
             Stwórz Quiz
           </NavLink>
         </div>
-        <div className={classes.fakeBorderXD}></div>
       </header>
       <Outlet />
     </>

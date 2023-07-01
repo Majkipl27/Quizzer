@@ -31,7 +31,7 @@
   cursor: pointer;
   box-sizing: border-box;
   position: relative;
-  transition: 200ms all linear;
+  transition: 150ms all linear;
 }
 
 .buttonWrap::after {
@@ -45,7 +45,7 @@
   border-radius: .5rem;
   opacity: .6;
   background: var(--gradient);
-  transition: 200ms all linear;
+  transition: 150ms all linear;
 }
 
 .buttonWrap:hover {

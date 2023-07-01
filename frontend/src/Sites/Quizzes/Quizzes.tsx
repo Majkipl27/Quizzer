@@ -1,19 +1,13 @@
 import { useState, useEffect } from "react";
 import classes from "./Quizzes.module.css";
 import Button from "../../Components/Button";
-import { useNavigate } from "react-router-dom";
+import QuizItem from "./Components/QuizItem";
 
 const Quizzes = () => {
-  const [newest, setNewest] = useState<Array<Quiz>>([
-    {
-      id: 0,
-      name: "",
-      description: "",
-      avatar_id: 0,
-    },
-  ]);
-
-  const navigate = useNavigate();
+  const [newest, setNewest] = useState<Array<Quiz>>([]);
+  const [isNewestError, setIsNewestError] = useState<boolean>(false);
+  const [quizzes, setQuizzes] = useState<Array<Quiz>>([])
+  const [isQuizzesError, setIsQuizzesError] = useState<boolean>(false);
 
   interface Quiz {
     id: number;
@@ -23,26 +17,41 @@ const Quizzes = () => {
   }
 
   const fetchNewest = async () => {
-    const response = await fetch("http://localhost:5000/quizzes/newest");
-    const data = await response.json();
-    setNewest(data);
+    try {
+      const response = await fetch("http://localhost:5000/quizzes/newest");
+
+      if (!response.ok) {
+        throw new Error("Błąd pobierania danych");
+      }
+
+      const data = await response.json();
+      setNewest(data);
+    } catch (error) {
+      console.error("Wystąpił błąd pobierania danych:", error);
+      setIsNewestError(true);
+    }
+  };
+
+  const fetchAll = async () => {
+    try {
+      const response = await fetch("http://localhost:5000/quizzes");
+
+      if (!response.ok) {
+        throw new Error("Błąd pobierania danych");
+      }
+
+      const data = await response.json();
+      setQuizzes(data);
+    } catch (error) {
+      console.error("Wystąpił błąd pobierania danych:", error);
+      setIsQuizzesError(true);
+    }
   };
 
   useEffect(() => {
     fetchNewest();
+    fetchAll();
   }, []);
-
-  function importAll(r: any) {
-    let images: any = {};
-    r.keys().forEach((item: any, index: any) => {
-      images[item.replace("./", "")] = r(item);
-    });
-    return images;
-  }
-
-  const images = Object.values(
-    importAll(require.context("./QuizzesAvatars/", false, /\.(png|jpe?g|svg)$/))
-  );
 
   return (
     <div className={classes.main}>
@@ -50,23 +59,37 @@ const Quizzes = () => {
       <div className={classes.newest}>
         <h2>Najnowsze</h2>
         <div className={classes.newestQuizzes}>
-          {newest.map((quiz) => (
-            <div
-              className={classes.quiz}
-              key={quiz.id}
-              style={{ background: `url(${images[quiz.avatar_id - 1]})` }}
-            >
-              <div className={classes.quizNav}>
-                <h3>{quiz.name}</h3>
-                <p>{quiz.description}</p>
-                <Button
-                    text="Rozwiąż quiz"
-                    onButtonClick={() => navigate(`/quiz/${quiz.id}`)}
-                    classname={classes.button}
-                />
-              </div>
-            </div>
-          ))}
+          {isNewestError ? (
+            <p className={classes.error}>
+              Wystąpił błąd podczas pobierania danych!{" "}
+              <Button
+                text="Kliknij aby spróbować ponownie"
+                onButtonClick={fetchNewest}
+              />
+            </p>
+          ) : (
+            newest.map((quiz) => (
+              <QuizItem id={quiz.id} name={quiz.name} description={quiz.description} avatar_id={quiz.avatar_id}/>
+            ))
+          )}
+        </div>
+      </div>
+      <div className={classes.allQuizzes}>
+        <h2>Wszystkie quizy</h2>
+        <div className={classes.quizzes}>
+          {isQuizzesError ? (
+            <p className={classes.error}>
+              Wystąpił błąd podczas pobierania danych!{" "}
+              <Button
+                text="Kliknij aby spróbować ponownie"
+                onButtonClick={fetchAll}
+              />
+            </p>
+          ) : (
+            quizzes.map((quiz) => (
+              <QuizItem id={quiz.id} name={quiz.name} description={quiz.description} avatar_id={quiz.avatar_id}/>
+            ))
+          )}
         </div>
       </div>
     </div>

@@ -1,0 +1,29 @@
+.input {
+  min-width: 100%;
+  padding: .5rem 1rem;
+  box-sizing: border-box;
+  position: relative;
+  appearance: none;
+  border: none;
+  border-radius: .25rem;
+  background-color: #343434;
+  color: var(--font-clr);
+  font-size: 1.25rem;
+}
+
+.wrap {
+  width: clamp(200px, 100%, 400px);
+  padding: .25rem;
+  background: var(--gradient);
+  border-radius: .5rem;
+  box-sizing: border-box;
+}
+
+.input:focus, .input:hover {
+  outline: none;
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 300px;
+}

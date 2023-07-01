@@ -1,0 +1,29 @@
+.navCounter {
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+    justify-content: center;
+    font-family: Quicksand;
+    font-size: 1.25rem;
+}
+
+.dot {
+    width: 3rem;
+    height: 3rem;
+    position: relative;
+    border-radius: 50%;
+    background-color: var(--font-clr);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dot:not(:last-of-type)::after {
+    content: '';
+    position: absolute;
+    width: 4rem;
+    height: 8px;
+    top: 1.25rem;
+    left: 2.5rem;
+    background-color: inherit;
+}

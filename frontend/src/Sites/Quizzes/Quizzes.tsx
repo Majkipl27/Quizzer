@@ -69,7 +69,13 @@ const Quizzes = () => {
             </p>
           ) : (
             newest.map((quiz) => (
-              <QuizItem id={quiz.id} name={quiz.name} description={quiz.description} avatar_id={quiz.avatar_id}/>
+              <QuizItem
+                id={quiz.id}
+                name={quiz.name}
+                description={quiz.description}
+                avatar_id={quiz.avatar_id}
+                key={quiz.id}
+              />
             ))
           )}
         </div>
@@ -87,7 +93,13 @@ const Quizzes = () => {
             </p>
           ) : (
             quizzes.map((quiz) => (
-              <QuizItem id={quiz.id} name={quiz.name} description={quiz.description} avatar_id={quiz.avatar_id}/>
+              <QuizItem
+                id={quiz.id}
+                name={quiz.name}
+                description={quiz.description}
+                avatar_id={quiz.avatar_id}
+                key={quiz.id}
+              />
             ))
           )}
         </div>

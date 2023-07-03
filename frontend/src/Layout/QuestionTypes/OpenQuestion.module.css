@@ -1,0 +1,36 @@
+.main {
+    width: clamp(300px, 100%, 700px);
+    position: relative;
+    background-color: var(--bg-clr);
+    border-radius: .25rem;
+    padding: 2rem;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.main::before {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    width: calc(100% + 8px);
+    height: calc(100% + 8px);
+    background: var(--gradient);
+    z-index: -1;
+    border-radius: .5rem;
+}
+
+.question {
+    background-color: var(--bg-clr);
+    border-radius: .25rem;
+    width: 100%;
+    color: var(--font-clr);
+    font-size: 2rem;
+    text-align: center;
+}
+
+.input {
+    width: 100%;
+}

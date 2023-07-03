@@ -3,11 +3,14 @@
 :root {
   --font-clr: #fff;
   --gradient: linear-gradient(45deg, #ffc700, #ed0000, #8583ff);
+  --bg-clr: #343434;
 }
 
 body {
   background-color: #343434;
   margin: 0;
+  font-family: Quicksand;
+  font-weight: 600;
 }
 
 h1, h2 {

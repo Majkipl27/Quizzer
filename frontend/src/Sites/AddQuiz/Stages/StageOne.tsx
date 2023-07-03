@@ -5,9 +5,13 @@ import { useRef } from "react";
 
 interface props {
   setData: any;
+  data: {
+    title: string;
+    description: string;
+  };
 }
 
-const StageOne = ({ setData }: props) => {
+const StageOne = ({ setData, data }: props) => {
   const nameRef = useRef<any>();
   const descRef = useRef<any>();
     
@@ -29,12 +33,14 @@ const StageOne = ({ setData }: props) => {
         onChange={handleChange}
         placeholder="Nazwa Quizu"
         valueRef={nameRef}
+        value={data.title}
       />
       <Textarea
         name="quizDescription"
         onChange={handleChange}
         placeholder="Opis Quizu"
         valueRef={descRef}
+        value={data.description}
       />
     </div>
   );

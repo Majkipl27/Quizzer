@@ -25,6 +25,7 @@ const Textarea = (props: InputProps) => {
         className={`${classes.input} ${classes.textarea} ${props.className}`}
         title={props.title}
         id={props.id}
+        defaultValue={props.value}
       />
     </div>
   );

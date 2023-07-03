@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import classes from "./AddQuiz.module.css";
 import NavCounter from "./Components/NavCounter";
 import StageOne from "./Stages/StageOne";
@@ -16,17 +16,33 @@ const AddQuiz = () => {
     description: "",
   });
 
+  const upgdateStageManagement = (number: number) => {
+    if (stage === 1 && (stageOneData.title === "" || stageOneData.description === "")) return alert("Uzupełnij wszystkie pola");
+
+    if (stage + number > 0 && stage + number < 4) {
+      setStage(stage + number);
+    }
+  }
+
   return (
     <div className={classes.main}>
       <h2>Stwórz Quiz</h2>
       <NavCounter stage={stage} />
-      {stage === 1 && <StageOne setData={setStageOneData} />}
+      {stage === 1 && (
+        <StageOne setData={setStageOneData} data={stageOneData} />
+      )}
       <div className={classes.buttons}>
         {stage > 1 && (
-          <Button text="Wróć" onButtonClick={() => setStage(stage - 1)} />
+          <Button
+            text="Wróć"
+            onButtonClick={() => upgdateStageManagement(-1)}
+          />
         )}
         {stage < 3 && (
-          <Button text="Dalej" onButtonClick={() => setStage(stage + 1)} />
+          <Button
+            text="Dalej"
+            onButtonClick={() => upgdateStageManagement(1)}
+          />
         )}
         {stage === 3 && <Button text="Zakończ" onButtonClick={() => {}} />}
       </div>

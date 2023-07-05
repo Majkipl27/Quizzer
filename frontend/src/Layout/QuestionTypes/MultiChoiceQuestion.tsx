@@ -1,28 +1,28 @@
-import classes from "./SingleChoiceQuestion.module.css";
+import classes from "./MultiChoiceQuestion.module.css";
 import { useState, useRef } from "react";
 import Input from "../../Components/Input";
 
-interface SingleChoiceQuestionProps {
+interface MultiChoiceQuestionProps {
   type: string;
   question?: string;
   questionId?: number;
-  answers?: Array<SingleChoiceQuestionAnswerProps>;
+  answers?: Array<MultiChoiceQuestionAnswerProps>;
 }
 
-interface SingleChoiceQuestionAnswerProps {
+interface MultiChoiceQuestionAnswerProps {
   id: number;
   answerContent: string;
   isCorrect: boolean;
 }
 
-const SingleChoiceQuestion = ({
+const MultiChoiceQuestion = ({
   type,
   question,
   questionId,
   answers,
-}: SingleChoiceQuestionProps) => {
+}: MultiChoiceQuestionProps) => {
   const [answersArray, setAnswersArray] = useState<
-    Array<SingleChoiceQuestionAnswerProps>
+    Array<MultiChoiceQuestionAnswerProps>
   >(
     answers || [
       { id: 0, answerContent: "", isCorrect: true },
@@ -64,10 +64,12 @@ const SingleChoiceQuestion = ({
   };
 
   const handleAnswerSelection = (selectedAnswerIndex: number) => {
-    const updatedAnswersArray = answersArray.map((answer, index) => ({
-      ...answer,
-      isCorrect: index === selectedAnswerIndex,
-    }));
+    const updatedAnswersArray = answersArray.map((answer, index) => {
+      if (index === selectedAnswerIndex) {
+        return { ...answer, isCorrect: !answer.isCorrect };
+      }
+      return answer;
+    });
     setAnswersArray(updatedAnswersArray);
   };
 
@@ -75,13 +77,13 @@ const SingleChoiceQuestion = ({
     <div className={classes.main}>
       <div className={classes.question}>
         <p>{question}</p>
-        <p className={classes.hint}>(wybierz jedno)</p>
+        <p className={classes.hint}>(wybierz jedno lub więcej)</p>
       </div>
       <div className={classes.answers}>
         {answers?.map((answer) => (
           <div className={classes.answer} key={answer.id}>
             <input
-              type="radio"
+              type="checkbox"
               name={questionId?.toString()}
               id={`question${questionId?.toString()}-${answer.id}`}
             />
@@ -108,7 +110,7 @@ const SingleChoiceQuestion = ({
           setQuestionValue(e.target.value);
         }}
       />
-      <p className={classes.hint}>(Zaznacz poprawną z boku)</p>
+      <p className={classes.hint}>(Zaznacz poprawne z boku)</p>
       <div className={classes.answers}>
         {answersArray.map((answer, i) => {
           return (
@@ -117,10 +119,10 @@ const SingleChoiceQuestion = ({
                 <p onClick={() => deleteAnswer(i)}>&#10006;</p>
               )}
               <input
-                type="radio"
+                type="checkbox"
                 name={tempQuestionId?.toString()}
                 onChange={() => handleAnswerSelection(i)}
-                defaultChecked={answer.isCorrect}
+                checked={answer.isCorrect}
               />
               <Input
                 type="text"
@@ -148,4 +150,4 @@ const SingleChoiceQuestion = ({
   else return <></>;
 };
 
-export default SingleChoiceQuestion;
+export default MultiChoiceQuestion;

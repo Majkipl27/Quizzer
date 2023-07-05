@@ -2,11 +2,12 @@ import classes from "./Input.module.css";
 import { useEffect, useState } from "react";
 
 interface InputProps {
-  valueRef: any;
+  valueRef?: any;
   type: string;
   name: string;
   value?: string;
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onBlur?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
   className?: string;
   required?: boolean;
@@ -30,6 +31,7 @@ const Input = (props: InputProps) => {
         type={props.type}
         name={props.name}
         onChange={props.onChange}
+        onBlur={props.onBlur}
         placeholder={props.placeholder}
         className={classes.input}
         title={props.title}

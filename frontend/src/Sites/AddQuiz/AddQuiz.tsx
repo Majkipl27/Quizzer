@@ -3,6 +3,7 @@ import classes from "./AddQuiz.module.css";
 import NavCounter from "./Components/NavCounter";
 import StageOne from "./Stages/StageOne";
 import Button from "../../Components/Button";
+import MultiChoiceQuestion from "../../Layout/QuestionTypes/MultiChoiceQuestion";
 
 interface stageOneData {
   title: any;
@@ -46,6 +47,7 @@ const AddQuiz = () => {
         )}
         {stage === 3 && <Button text="Zakończ" onButtonClick={() => {}} />}
       </div>
+      <MultiChoiceQuestion type="question" question="Pytanie" />
     </div>
   );
 };

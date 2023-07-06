@@ -1,0 +1,27 @@
+.main {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+    color: var(--font-clr);
+    background-color: var(--bg-clr);
+    position: relative;
+    padding: 2rem;
+    border-radius: .25rem;
+}
+
+.main::before {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    width: calc(100% + 8px);
+    height: calc(100% + 8px);
+    background: var(--gradient);
+    z-index: -1;
+    border-radius: .5rem;
+}
+
+.main > * {
+    cursor: pointer;
+}

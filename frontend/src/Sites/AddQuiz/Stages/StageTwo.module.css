@@ -1,0 +1,24 @@
+.questions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    gap: 2rem;
+    margin-bottom: 20px;
+}
+
+.question {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    align-items: center;
+    justify-content: center;
+}
+
+.delete {
+    color: var(--font-clr);
+    font-size: 1rem;
+    cursor: pointer;
+}

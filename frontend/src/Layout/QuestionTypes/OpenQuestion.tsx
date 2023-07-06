@@ -34,7 +34,7 @@ const OpenQuestion = ({ type, question }: props) => {
         name="openQuestion"
         placeholder="Treść pytania"
         valueRef={questionRef}
-        onChange={() => setQuestionState(answerRef.current.value)}
+        onChange={() => setQuestionState(questionRef.current.value)}
         className={classes.input}
       />
       <Input

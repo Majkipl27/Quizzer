@@ -2,13 +2,20 @@ import SingleChoiceQuestion from "./QuestionTypes/SingleChoiceQuestion";
 import MultiChoiceQuestion from "./QuestionTypes/MultiChoiceQuestion";
 import OpenQuestion from "./QuestionTypes/OpenQuestion";
 import classes from "./AddQuestion.module.css";
+import { useAtomValue } from "jotai";
+import { questionsAtom } from "../atoms";
 
 const AddQuestion = (props: any) => {
+  const questions = useAtomValue(questionsAtom);
+
   return (
     <div className={classes.main}>
       <div
         onClick={() => {
-          props.onClose(<SingleChoiceQuestion type="question" />);
+          props.onClose(
+            <SingleChoiceQuestion type="question" id={questions.length} />,
+            "singleChoice"
+          );
         }}
       >
         Pytanie jednokrotnego wyboru
@@ -16,9 +23,8 @@ const AddQuestion = (props: any) => {
       <div
         onClick={() => {
           props.onClose(
-            <MultiChoiceQuestion
-              type="question"
-            />
+            <MultiChoiceQuestion type="question" id={questions.length} />,
+            "multiChoice"
           );
         }}
       >
@@ -27,9 +33,8 @@ const AddQuestion = (props: any) => {
       <div
         onClick={() => {
           props.onClose(
-            <OpenQuestion
-              type="question"
-            />
+            <OpenQuestion type="question" id={questions.length} />,
+            "open"
           );
         }}
       >

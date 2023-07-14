@@ -1,8 +1,11 @@
 import classes from "./SingleChoiceQuestion.module.css";
 import { useState, useRef } from "react";
 import Input from "../../Components/Input";
+import { useAtom } from "jotai";
+import { questionDataAtom } from "../../atoms";
 
 interface SingleChoiceQuestionProps {
+  id: number;
   type: string;
   question?: string;
   questionId?: number;
@@ -16,31 +19,39 @@ interface SingleChoiceQuestionAnswerProps {
 }
 
 const SingleChoiceQuestion = ({
+  id,
   type,
   question,
   questionId,
   answers,
 }: SingleChoiceQuestionProps) => {
+  const [globalQuestionData, setGlobalQuestionData] = useAtom(questionDataAtom);
+
   const [answersArray, setAnswersArray] = useState<
     Array<SingleChoiceQuestionAnswerProps>
-  >(
-    answers || [
-      { id: 0, answerContent: "", isCorrect: true },
-      { id: 1, answerContent: "", isCorrect: false },
-    ]
-  );
+  >(globalQuestionData[id].answersArray);
+
   const [answersCount, setAnswersCount] = useState<number>(
-    answers ? answers.length : 2
+    globalQuestionData[id].answersArray.length
   );
-  const [questionValue, setQuestionValue] = useState<string>(question || "");
+
+  const [questionValue, setQuestionValue] = useState<string>(
+    globalQuestionData[id].questionValue
+  );
   const refs = useRef<Array<HTMLInputElement>>([]);
 
   const addAnswer = () => {
+    let copy = [...globalQuestionData];
     setAnswersArray([
       ...answersArray,
       { id: answersCount, answerContent: "", isCorrect: false },
     ]);
-    setAnswersCount(answersCount + 1);
+    copy[id].answersArray = [
+      ...answersArray,
+      { id: answersCount, answerContent: "", isCorrect: false },
+    ];
+    setGlobalQuestionData(copy);
+    setAnswersCount((e) => e + 1);
   };
 
   const deleteAnswer = (answerIndex: number) => {
@@ -50,7 +61,10 @@ const SingleChoiceQuestion = ({
       ...answer,
       id: index,
     }));
+    let copy = [...globalQuestionData];
+    copy[id].answersArray = updatedArray;
     setAnswersArray(updatedArray);
+    setGlobalQuestionData(copy);
     setAnswersCount((count) => count - 1);
   };
 
@@ -64,11 +78,21 @@ const SingleChoiceQuestion = ({
   };
 
   const handleAnswerSelection = (selectedAnswerIndex: number) => {
+    let copy = [...globalQuestionData];
     const updatedAnswersArray = answersArray.map((answer, index) => ({
       ...answer,
       isCorrect: index === selectedAnswerIndex,
     }));
+    copy[id].answersArray = updatedAnswersArray;
     setAnswersArray(updatedAnswersArray);
+    setAnswersArray(updatedAnswersArray);
+  };
+
+  const handleQuestionChange = (e: string) => {
+    let copy = [...globalQuestionData];
+    copy[id].questionValue = e;
+    setQuestionValue(e);
+    setGlobalQuestionData(copy);
   };
 
   const answerLayout = (
@@ -105,7 +129,7 @@ const SingleChoiceQuestion = ({
         value={questionValue}
         className={classes.questionInput}
         onChange={(e) => {
-          setQuestionValue(e.target.value);
+          handleQuestionChange(e.target.value);
         }}
       />
       <p className={classes.hint}>(Zaznacz poprawną z boku)</p>
@@ -143,9 +167,7 @@ const SingleChoiceQuestion = ({
     </div>
   );
 
-  if (type === "answer") return answerLayout;
-  else if (type === "question") return questionLayout;
-  else return <></>;
+  return type === "answer" ? answerLayout : questionLayout;
 };
 
 export default SingleChoiceQuestion;

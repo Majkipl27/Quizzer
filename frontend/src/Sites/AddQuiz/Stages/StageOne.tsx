@@ -2,23 +2,19 @@ import Input from "../../../Components/Input";
 import classes from "./Main.module.css";
 import Textarea from "../../../Components/Textarea";
 import { useRef } from "react";
+import { useAtom } from "jotai";
+import { quizDataAtom } from "../../../atoms";
 
-interface props {
-  setData: any;
-  data: {
-    title: string;
-    description: string;
-  };
-}
-
-const StageOne = ({ setData, data }: props) => {
+const StageOne = () => {
   const nameRef = useRef<any>();
   const descRef = useRef<any>();
+  const [data, setData] = useAtom(quizDataAtom);
     
   function handleChange() {
     setData({
       title: nameRef.current.value,
       description: descRef.current.value,
+      avatarId: data.avatarId,
     });
   };
 

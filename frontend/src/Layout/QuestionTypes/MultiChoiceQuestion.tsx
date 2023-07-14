@@ -1,8 +1,11 @@
 import classes from "./MultiChoiceQuestion.module.css";
 import { useState, useRef } from "react";
 import Input from "../../Components/Input";
+import { useAtom } from "jotai";
+import { questionDataAtom } from "../../atoms";
 
 interface MultiChoiceQuestionProps {
+  id: number;
   type: string;
   question?: string;
   questionId?: number;
@@ -16,31 +19,40 @@ interface MultiChoiceQuestionAnswerProps {
 }
 
 const MultiChoiceQuestion = ({
+  id,
   type,
   question,
   questionId,
   answers,
 }: MultiChoiceQuestionProps) => {
+  const [globalQuestionData, setGlobalQuestionData] = useAtom(questionDataAtom);
+
   const [answersArray, setAnswersArray] = useState<
     Array<MultiChoiceQuestionAnswerProps>
-  >(
-    answers || [
-      { id: 0, answerContent: "", isCorrect: true },
-      { id: 1, answerContent: "", isCorrect: false },
-    ]
-  );
+  >(globalQuestionData[id].answersArray);
+
   const [answersCount, setAnswersCount] = useState<number>(
-    answers ? answers.length : 2
+    globalQuestionData[id].answersArray.length
   );
-  const [questionValue, setQuestionValue] = useState<string>(question || "");
+
+  const [questionValue, setQuestionValue] = useState<string>(
+    globalQuestionData[id].questionValue
+  );
+
   const refs = useRef<Array<HTMLInputElement>>([]);
 
   const addAnswer = () => {
+    let copy = [...globalQuestionData];
     setAnswersArray([
       ...answersArray,
       { id: answersCount, answerContent: "", isCorrect: false },
     ]);
-    setAnswersCount(answersCount + 1);
+    copy[id].answersArray = [
+      ...answersArray,
+      { id: answersCount, answerContent: "", isCorrect: false },
+    ];
+    setGlobalQuestionData(copy);
+    setAnswersCount((e) => e + 1);
   };
 
   const deleteAnswer = (answerIndex: number) => {
@@ -50,7 +62,10 @@ const MultiChoiceQuestion = ({
       ...answer,
       id: index,
     }));
+    let copy = [...globalQuestionData];
+    copy[id].answersArray = updatedArray;
     setAnswersArray(updatedArray);
+    setGlobalQuestionData(copy);
     setAnswersCount((count) => count - 1);
   };
 
@@ -63,14 +78,21 @@ const MultiChoiceQuestion = ({
     setAnswersArray(tempArray);
   };
 
+  const handleQuestionChange = (e: string) => {
+      let copy = [...globalQuestionData];
+      copy[id].questionValue = e;
+      setQuestionValue(e);
+      setGlobalQuestionData(copy);
+  };
+
   const handleAnswerSelection = (selectedAnswerIndex: number) => {
-    const updatedAnswersArray = answersArray.map((answer, index) => {
-      if (index === selectedAnswerIndex) {
-        return { ...answer, isCorrect: !answer.isCorrect };
-      }
-      return answer;
-    });
+    let isCorrect = answersArray[selectedAnswerIndex].isCorrect;
+    let updatedAnswersArray = [...answersArray];
+    let copy = [...globalQuestionData];
+    copy[id].answersArray = updatedAnswersArray;
+    updatedAnswersArray[selectedAnswerIndex].isCorrect = !isCorrect;
     setAnswersArray(updatedAnswersArray);
+    setGlobalQuestionData(copy);
   };
 
   const answerLayout = (
@@ -107,12 +129,12 @@ const MultiChoiceQuestion = ({
         value={questionValue}
         className={classes.questionInput}
         onChange={(e) => {
-          setQuestionValue(e.target.value);
+          handleQuestionChange(e.target.value);
         }}
       />
       <p className={classes.hint}>(Zaznacz poprawne z boku)</p>
       <div className={classes.answers}>
-        {answersArray.map((answer, i) => {
+        {answersArray.map((answer: any, i: number) => {
           return (
             <div className={classes.answer} key={Math.random()}>
               {answersCount > 2 && (
@@ -145,9 +167,7 @@ const MultiChoiceQuestion = ({
     </div>
   );
 
-  if (type === "answer") return answerLayout;
-  else if (type === "question") return questionLayout;
-  else return <></>;
+  return type === "answer" ? answerLayout : questionLayout;
 };
 
 export default MultiChoiceQuestion;

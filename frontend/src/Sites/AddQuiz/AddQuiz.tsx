@@ -1,22 +1,25 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import classes from "./AddQuiz.module.css";
 import NavCounter from "./Components/NavCounter";
 import StageOne from "./Stages/StageOne";
 import StageTwo from "./Stages/StageTwo";
 import Button from "../../Components/Button";
-
-interface stageOneData {
-  title: any;
-  description: any;
-}
+import { useSetAtom, useAtomValue } from "jotai";
+import { questionDataAtom, questionsAtom, quizDataAtom } from "../../atoms";
 
 const AddQuiz = () => {
   const [stage, setStage] = useState<number>(1);
-  const [stageOneData, setStageOneData] = useState<stageOneData>({
-    title: "",
-    description: "",
-  });
-  const [stageTwoData, setStageTwoData] = useState<any>([]);
+  const stageOneData = useAtomValue(quizDataAtom);
+  const setQuestionData = useSetAtom(questionDataAtom);
+  const setQuestions = useSetAtom(questionsAtom);
+
+  useEffect(() => {
+    return () => {
+      setQuestionData([]);
+      setQuestions([]);
+    }
+  }
+  , []);
 
   const upgdateStageManagement = (number: number) => {
     if (
@@ -35,10 +38,10 @@ const AddQuiz = () => {
       <h2>Stwórz Quiz</h2>
       <NavCounter stage={stage} />
       {stage === 1 && (
-        <StageOne setData={setStageOneData} data={stageOneData} />
+        <StageOne />
       )}
       {stage === 2 && (
-        <StageTwo data={stageTwoData} setData={setStageTwoData} />
+        <StageTwo />
       )}
       <div className={classes.buttons}>
         {stage > 1 && (

@@ -1,17 +1,41 @@
 import classes from "./OpenQuestion.module.css";
 import Input from "../../Components/Input";
 import { useRef, useState } from "react";
+import { useAtom } from "jotai";
+import { questionDataAtom } from "../../atoms";
 
 interface props {
+  id: number;
   type: string;
   question?: string;
 }
 
-const OpenQuestion = ({ type, question }: props) => {
+const OpenQuestion = ({ id, type, question }: props) => {
   const answerRef = useRef<any>();
   const questionRef = useRef<any>();
-  const [answer, setAnswer] = useState<string>("");
-  const [questionState, setQuestionState] = useState<string>("");
+  const [globalQuestionData, setGlobalQuestionData] = useAtom(questionDataAtom);
+
+  const [answer, setAnswer] = useState<string>(
+    globalQuestionData[id].answersArray[0].answerContent
+  );
+
+  const [questionValue, setQuestionValue] = useState<string>(
+    globalQuestionData[id].questionValue
+  );
+
+  const handleQuestionChange = () => {
+    let copy = [...globalQuestionData];
+    copy[id].questionValue = questionRef.current.value;
+    setGlobalQuestionData(copy);
+    setQuestionValue(questionRef.current.value);
+  };
+
+  const setAnswerHandler = () => {
+    let copy = [...globalQuestionData];
+    copy[id].answersArray[0].answerContent = answerRef.current.value;
+    setGlobalQuestionData(copy);
+    setAnswer(answerRef.current.value);
+  };
 
   const answerLayout = (
     <div className={classes.main}>
@@ -20,8 +44,7 @@ const OpenQuestion = ({ type, question }: props) => {
         type="text"
         name="openQuestion"
         placeholder="Odpowiedź"
-        valueRef={answerRef}
-        onChange={() => setAnswer(answerRef.current.value)}
+        value={answer}
         className={classes.input}
       />
     </div>
@@ -33,24 +56,24 @@ const OpenQuestion = ({ type, question }: props) => {
         type="text"
         name="openQuestion"
         placeholder="Treść pytania"
+        value={questionValue}
         valueRef={questionRef}
-        onChange={() => setQuestionState(questionRef.current.value)}
+        onChange={handleQuestionChange}
         className={classes.input}
       />
       <Input
         type="text"
         name="openQuestion"
         placeholder="Poprawna odpowiedź"
+        value={answer}
         valueRef={answerRef}
-        onChange={() => setAnswer(answerRef.current.value)}
+        onChange={setAnswerHandler}
         className={classes.input}
       />
     </div>
   );
 
-  if (type === "answer") return answerLayout;
-  else if (type === "question") return questionLayout;
-  else return <></>;
+  return type === "answer" ? answerLayout : questionLayout;
 };
 
 export default OpenQuestion;

@@ -22,7 +22,11 @@ const QuizItem = ({id, name, description, avatar_id}: quizItemProps) => {
 
   const images = Object.values(
     importAll(
-      require.context("../QuizzesAvatars/", false, /\.(png|jpe?g|svg)$/)
+      require.context(
+        "../../../Graphics/QuizzesAvatars",
+        false,
+        /\.(png|jpe?g|svg)$/
+      )
     )
   );
 

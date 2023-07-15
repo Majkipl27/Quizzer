@@ -19,7 +19,7 @@ interface quizData {
 const quizDataAtom = atom<quizData>({
   title: "",
   description: "",
-  avatarId: 0,
+  avatarId: 1,
 });
 const questionsAtom = atom<any>([]);
 const questionDataAtom = atom<Array<questionData>>([]);

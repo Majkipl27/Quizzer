@@ -1,0 +1,30 @@
+.image {
+  width: 420px;
+  height: 604px;
+  cursor: pointer;
+  position: relative;
+  box-sizing: border-box;
+  border-radius: 0.5rem;
+  border: 0.25rem solid transparent;
+}
+
+.activeOption {
+  background: var(--gradient);
+  border-radius: 0.5rem;
+}
+
+.images {
+  width: 100%;
+  padding: 0 3rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  grid-gap: 3rem;
+  padding-top: 0;
+  box-sizing: border-box;
+  border-radius: 0.25rem;
+}
+
+.option > input,
+.activeOption > input {
+  display: none;
+}

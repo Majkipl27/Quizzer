@@ -3,6 +3,7 @@ import classes from "./AddQuiz.module.css";
 import NavCounter from "./Components/NavCounter";
 import StageOne from "./Stages/StageOne";
 import StageTwo from "./Stages/StageTwo";
+import StageThree from "./Stages/StageThree";
 import Button from "../../Components/Button";
 import { useSetAtom, useAtomValue } from "jotai";
 import { questionDataAtom, questionsAtom, quizDataAtom } from "../../atoms";
@@ -42,6 +43,9 @@ const AddQuiz = () => {
       )}
       {stage === 2 && (
         <StageTwo />
+      )}
+      {stage === 3 && (
+        <StageThree />
       )}
       <div className={classes.buttons}>
         {stage > 1 && (

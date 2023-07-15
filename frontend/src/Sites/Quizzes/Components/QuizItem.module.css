@@ -19,6 +19,10 @@
   border-radius: 0.5rem;
 }
 
+.quiz:hover .quizNav {
+  background-color: #343434d2;
+}
+
 .quizNav {
   position: absolute;
   left: 0;
@@ -30,6 +34,7 @@
   padding: 1rem;
   border-radius: 0 0 0.25rem 0.25rem;
   z-index: 1;
+  transition: all 0.2s ease-in;
 }
 
 .quizNav > p {

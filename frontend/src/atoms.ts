@@ -3,6 +3,7 @@ import { atom } from "jotai";
 interface questionData {
   id: number;
   questionValue: string;
+  question_type: string;
   answersArray: Array<{
     id: number;
     answerContent: string;

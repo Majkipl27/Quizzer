@@ -1,6 +1,6 @@
 .image {
-  width: 420px;
-  height: 604px;
+  width: 100%;
+  max-height: 604px;
   cursor: pointer;
   position: relative;
   box-sizing: border-box;

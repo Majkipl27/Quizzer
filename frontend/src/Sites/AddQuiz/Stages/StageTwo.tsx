@@ -21,6 +21,7 @@ const StageTwo = () => {
           {
             id: Math.random() * 1000,
             questionValue: "",
+            question_type: "multipleChoice",
             answersArray: [
               { id: 0, answerContent: "", isCorrect: true },
               { id: 1, answerContent: "", isCorrect: false },
@@ -35,6 +36,7 @@ const StageTwo = () => {
           {
             id: Math.random() * 1000,
             questionValue: "",
+            question_type: "open",
             answersArray: [{ id: 0, answerContent: "", isCorrect: true }],
           },
         ]);
@@ -46,6 +48,7 @@ const StageTwo = () => {
           {
             id: Math.random() * 1000,
             questionValue: "",
+            question_type: "singleChoice",
             answersArray: [
               { id: 0, answerContent: "", isCorrect: true },
               { id: 1, answerContent: "", isCorrect: false },
@@ -65,7 +68,7 @@ const StageTwo = () => {
     let tempArray2 = [...questionData];
     tempArray[index] = null;
     console.log(tempArray);
-    tempArray2[index] = { id: -1, questionValue: "", answersArray: [] };
+    tempArray2[index] = { id: -1, questionValue: "", answersArray: [], question_type: ""};
     setQuestions(tempArray);
     setQuestionData(tempArray2);
   }

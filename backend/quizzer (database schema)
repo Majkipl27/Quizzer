@@ -1,0 +1,290 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 15.2
+-- Dumped by pg_dump version 15.2
+
+-- Started on 2023-07-25 18:23:22
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- TOC entry 851 (class 1247 OID 18094)
+-- Name: quizquestiontype; Type: TYPE; Schema: public; Owner: postgres
+--
+
+CREATE TYPE public.quizquestiontype AS ENUM (
+    'singleChoice',
+    'multipleChoice',
+    'open'
+);
+
+
+ALTER TYPE public.quizquestiontype OWNER TO postgres;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- TOC entry 219 (class 1259 OID 18074)
+-- Name: questionanswers; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.questionanswers (
+    id integer NOT NULL,
+    questionid integer,
+    answer character varying(255),
+    iscorrect bit(1)
+);
+
+
+ALTER TABLE public.questionanswers OWNER TO postgres;
+
+--
+-- TOC entry 218 (class 1259 OID 18073)
+-- Name: questionanswers_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.questionanswers_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.questionanswers_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3350 (class 0 OID 0)
+-- Dependencies: 218
+-- Name: questionanswers_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.questionanswers_id_seq OWNED BY public.questionanswers.id;
+
+
+--
+-- TOC entry 217 (class 1259 OID 18062)
+-- Name: quizquestions; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.quizquestions (
+    id integer NOT NULL,
+    question character varying(255),
+    quiz_id integer,
+    question_type public.quizquestiontype
+);
+
+
+ALTER TABLE public.quizquestions OWNER TO postgres;
+
+--
+-- TOC entry 216 (class 1259 OID 18061)
+-- Name: quizquestions_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.quizquestions_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.quizquestions_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3351 (class 0 OID 0)
+-- Dependencies: 216
+-- Name: quizquestions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.quizquestions_id_seq OWNED BY public.quizquestions.id;
+
+
+--
+-- TOC entry 215 (class 1259 OID 18051)
+-- Name: quizzes; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.quizzes (
+    id integer NOT NULL,
+    name character varying(255) NOT NULL,
+    description text,
+    avatar_id integer
+);
+
+
+ALTER TABLE public.quizzes OWNER TO postgres;
+
+--
+-- TOC entry 214 (class 1259 OID 18050)
+-- Name: quizzes_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.quizzes_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.quizzes_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3352 (class 0 OID 0)
+-- Dependencies: 214
+-- Name: quizzes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.quizzes_id_seq OWNED BY public.quizzes.id;
+
+
+--
+-- TOC entry 3188 (class 2604 OID 18077)
+-- Name: questionanswers id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.questionanswers ALTER COLUMN id SET DEFAULT nextval('public.questionanswers_id_seq'::regclass);
+
+
+--
+-- TOC entry 3187 (class 2604 OID 18065)
+-- Name: quizquestions id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.quizquestions ALTER COLUMN id SET DEFAULT nextval('public.quizquestions_id_seq'::regclass);
+
+
+--
+-- TOC entry 3186 (class 2604 OID 18054)
+-- Name: quizzes id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.quizzes ALTER COLUMN id SET DEFAULT nextval('public.quizzes_id_seq'::regclass);
+
+
+--
+-- TOC entry 3344 (class 0 OID 18074)
+-- Dependencies: 219
+-- Data for Name: questionanswers; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.questionanswers (id, questionid, answer, iscorrect) FROM stdin;
+\.
+
+
+--
+-- TOC entry 3342 (class 0 OID 18062)
+-- Dependencies: 217
+-- Data for Name: quizquestions; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.quizquestions (id, question, quiz_id, question_type) FROM stdin;
+\.
+
+
+--
+-- TOC entry 3340 (class 0 OID 18051)
+-- Dependencies: 215
+-- Data for Name: quizzes; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.quizzes (id, name, description, avatar_id) FROM stdin;
+\.
+
+
+--
+-- TOC entry 3353 (class 0 OID 0)
+-- Dependencies: 218
+-- Name: questionanswers_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.questionanswers_id_seq', 186, true);
+
+
+--
+-- TOC entry 3354 (class 0 OID 0)
+-- Dependencies: 216
+-- Name: quizquestions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.quizquestions_id_seq', 187, true);
+
+
+--
+-- TOC entry 3355 (class 0 OID 0)
+-- Dependencies: 214
+-- Name: quizzes_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.quizzes_id_seq', 105, true);
+
+
+--
+-- TOC entry 3194 (class 2606 OID 18079)
+-- Name: questionanswers questionanswers_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.questionanswers
+    ADD CONSTRAINT questionanswers_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3192 (class 2606 OID 18067)
+-- Name: quizquestions quizquestions_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.quizquestions
+    ADD CONSTRAINT quizquestions_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3190 (class 2606 OID 18060)
+-- Name: quizzes quizzes_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.quizzes
+    ADD CONSTRAINT quizzes_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3196 (class 2606 OID 18080)
+-- Name: questionanswers questionanswers_questionid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.questionanswers
+    ADD CONSTRAINT questionanswers_questionid_fkey FOREIGN KEY (questionid) REFERENCES public.quizquestions(id);
+
+
+--
+-- TOC entry 3195 (class 2606 OID 18068)
+-- Name: quizquestions quizquestions_quiz_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.quizquestions
+    ADD CONSTRAINT quizquestions_quiz_id_fkey FOREIGN KEY (quiz_id) REFERENCES public.quizzes(id);
+
+
+-- Completed on 2023-07-25 18:23:23
+
+--
+-- PostgreSQL database dump complete
+--
+

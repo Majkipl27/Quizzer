@@ -39,12 +39,18 @@
 
 .quizNav > p {
   margin: 2rem 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .quizNav h3 {
   font-size: 2rem;
   font-weight: 500;
   margin-block: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .button {

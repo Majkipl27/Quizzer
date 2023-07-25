@@ -26,6 +26,7 @@ const Textarea = (props: InputProps) => {
         title={props.title}
         id={props.id}
         defaultValue={props.value}
+        maxLength={props.maxLength}
       />
     </div>
   );

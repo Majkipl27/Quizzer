@@ -6,7 +6,7 @@ import QuizItem from "./Components/QuizItem";
 const Quizzes = () => {
   const [newest, setNewest] = useState<Array<Quiz>>([]);
   const [isNewestError, setIsNewestError] = useState<boolean>(false);
-  const [quizzes, setQuizzes] = useState<Array<Quiz>>([])
+  const [quizzes, setQuizzes] = useState<Array<Quiz>>([]);
   const [isQuizzesError, setIsQuizzesError] = useState<boolean>(false);
 
   interface Quiz {
@@ -67,7 +67,7 @@ const Quizzes = () => {
                 onButtonClick={fetchNewest}
               />
             </p>
-          ) : (
+          ) : newest.length > 0 ? (
             newest.map((quiz) => (
               <QuizItem
                 id={quiz.id}
@@ -77,6 +77,8 @@ const Quizzes = () => {
                 key={quiz.id}
               />
             ))
+          ) : (
+            <p className={classes.error}>Brak quizów do wyświetlenia</p>
           )}
         </div>
       </div>
@@ -91,7 +93,7 @@ const Quizzes = () => {
                 onButtonClick={fetchAll}
               />
             </p>
-          ) : (
+          ) : quizzes.length > 0 ? (
             quizzes.map((quiz) => (
               <QuizItem
                 id={quiz.id}
@@ -101,6 +103,8 @@ const Quizzes = () => {
                 key={quiz.id}
               />
             ))
+          ) : (
+            <p className={classes.error}>Brak quizów do wyświetlenia</p>
           )}
         </div>
       </div>

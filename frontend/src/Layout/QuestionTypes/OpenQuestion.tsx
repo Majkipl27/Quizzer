@@ -2,7 +2,7 @@ import classes from "./OpenQuestion.module.css";
 import Input from "../../Components/Input";
 import { useRef, useState } from "react";
 import { useAtom } from "jotai";
-import { questionDataAtom } from "../../atoms";
+import { questionDataAtom, userAnswersAtom } from "../../atoms";
 
 interface props {
   id: number;
@@ -11,9 +11,14 @@ interface props {
 }
 
 const OpenQuestion = ({ id, type, question }: props) => {
-  const answerRef = useRef<any>();
+  const answerRef = useRef<any>('');
   const questionRef = useRef<any>();
   const [globalQuestionData, setGlobalQuestionData] = useAtom(questionDataAtom);
+  const [userGlobalAnswers, setUserGlobalAnswers] = useAtom(
+    userAnswersAtom
+  );
+
+  const [userAnswers, setUserAnswers] = useState<any>(userGlobalAnswers[id].answersArray);
 
   const [answer, setAnswer] = useState<string>(
     globalQuestionData[id].answersArray[0].answerContent
@@ -37,15 +42,27 @@ const OpenQuestion = ({ id, type, question }: props) => {
     setAnswer(answerRef.current.value);
   };
 
+  const handleUserAnswer = () => {
+    let copy = [...userAnswers];
+    let copy2 = [...userGlobalAnswers];
+    copy[0].answerContent = answerRef.current.value;
+    copy2[id].answersArray[0].answerContent = answerRef.current.value;
+
+    setUserGlobalAnswers(copy2);
+    setUserAnswers(copy);
+  }
+
   const answerLayout = (
     <div className={classes.main}>
       <div className={classes.question}>{question || "Treść pytania"}</div>
       <Input
         type="text"
-        name="openQuestion"
+        name={`openQuestion${Math.random()}`}
         placeholder="Odpowiedź"
-        value={answer}
+        value={answerRef.current.value || ""}
         className={classes.input}
+        valueRef={answerRef}
+        onChange={handleUserAnswer}
       />
     </div>
   );

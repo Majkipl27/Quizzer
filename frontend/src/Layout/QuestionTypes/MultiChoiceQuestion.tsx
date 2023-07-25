@@ -2,7 +2,7 @@ import classes from "./MultiChoiceQuestion.module.css";
 import { useState, useRef } from "react";
 import Input from "../../Components/Input";
 import { useAtom } from "jotai";
-import { questionDataAtom } from "../../atoms";
+import { questionDataAtom, userAnswersAtom } from "../../atoms";
 
 interface MultiChoiceQuestionProps {
   id: number;
@@ -26,6 +26,10 @@ const MultiChoiceQuestion = ({
   answers,
 }: MultiChoiceQuestionProps) => {
   const [globalQuestionData, setGlobalQuestionData] = useAtom(questionDataAtom);
+  const [userGlobalAnswers, setUserGlobalAnswers] = useAtom(userAnswersAtom);
+  const [userAnswers, setUserAnswers] = useState<any>(
+    userGlobalAnswers[id].answersArray
+  );
 
   const [answersArray, setAnswersArray] = useState<
     Array<MultiChoiceQuestionAnswerProps>
@@ -95,6 +99,18 @@ const MultiChoiceQuestion = ({
     setGlobalQuestionData(copy);
   };
 
+  const handleUSerAnswerSelection = (selectedAnswerIndex: number) => {
+    let isCorrect = userAnswers[selectedAnswerIndex].isCorrect;
+    let updatedAnswersArray = [...userAnswers];
+    let copy = [...userGlobalAnswers];
+    copy[id].answersArray = updatedAnswersArray;
+    updatedAnswersArray[selectedAnswerIndex].isCorrect = !isCorrect;
+    setUserAnswers(updatedAnswersArray);
+    setUserGlobalAnswers(copy);
+  };
+
+  const tempQuestionId = questionId || Math.random() * 1000;
+
   const answerLayout = (
     <div className={classes.main}>
       <div className={classes.question}>
@@ -102,14 +118,17 @@ const MultiChoiceQuestion = ({
         <p className={classes.hint}>(wybierz jedno lub więcej)</p>
       </div>
       <div className={classes.answers}>
-        {answers?.map((answer) => (
+        {userAnswers?.map((answer: any) => (
           <div className={classes.answer} key={answer.id}>
             <input
               type="checkbox"
-              name={questionId?.toString()}
-              id={`question${questionId?.toString()}-${answer.id}`}
+              name={tempQuestionId?.toString()}
+              id={`question${tempQuestionId?.toString()}-${answer.id}`}
+              onChange={() => handleUSerAnswerSelection(answer.id - 1)}
             />
-            <label htmlFor={`question${questionId?.toString()}-${answer.id}`}>
+            <label
+              htmlFor={`question${tempQuestionId?.toString()}-${answer.id}`}
+            >
               {answer.answerContent}
             </label>
           </div>
@@ -117,8 +136,6 @@ const MultiChoiceQuestion = ({
       </div>
     </div>
   );
-
-  const tempQuestionId = questionId || Math.random() * 1000;
 
   const questionLayout = (
     <div className={classes.main}>

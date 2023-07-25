@@ -17,6 +17,14 @@ interface quizData {
   avatarId: number;
 }
 
+interface Answers {
+  answersArray: Array<{
+    id: number;
+    answerContent: string;
+    isCorrect: boolean;
+  }>;
+}
+
 const quizDataAtom = atom<quizData>({
   title: "",
   description: "",
@@ -24,5 +32,6 @@ const quizDataAtom = atom<quizData>({
 });
 const questionsAtom = atom<any>([]);
 const questionDataAtom = atom<Array<questionData>>([]);
+const userAnswersAtom = atom<Array<Answers>>([]);
 
-export { questionsAtom, questionDataAtom, quizDataAtom };
+export { questionsAtom, questionDataAtom, quizDataAtom, userAnswersAtom };

@@ -30,6 +30,7 @@ const StageOne = () => {
         placeholder="Nazwa Quizu"
         valueRef={nameRef}
         value={data.title}
+        maxLength={30}
       />
       <Textarea
         name="quizDescription"
@@ -37,6 +38,7 @@ const StageOne = () => {
         placeholder="Opis Quizu"
         valueRef={descRef}
         value={data.description}
+        maxLength={150}
       />
     </div>
   );

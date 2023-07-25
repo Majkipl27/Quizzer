@@ -2,14 +2,13 @@ import classes from "./SingleChoiceQuestion.module.css";
 import { useState, useRef } from "react";
 import Input from "../../Components/Input";
 import { useAtom } from "jotai";
-import { questionDataAtom } from "../../atoms";
+import { questionDataAtom, userAnswersAtom } from "../../atoms";
 
 interface SingleChoiceQuestionProps {
   id: number;
   type: string;
   question?: string;
   questionId?: number;
-  answers?: Array<SingleChoiceQuestionAnswerProps>;
 }
 
 interface SingleChoiceQuestionAnswerProps {
@@ -23,9 +22,12 @@ const SingleChoiceQuestion = ({
   type,
   question,
   questionId,
-  answers,
 }: SingleChoiceQuestionProps) => {
   const [globalQuestionData, setGlobalQuestionData] = useAtom(questionDataAtom);
+  const [userGlobalAnswers, setUserGlobalAnswers] = useAtom(userAnswersAtom);
+  const [userAnswers, setUserAnswers] = useState<any>(
+    userGlobalAnswers[id].answersArray
+  );
 
   const [answersArray, setAnswersArray] = useState<
     Array<SingleChoiceQuestionAnswerProps>
@@ -85,7 +87,16 @@ const SingleChoiceQuestion = ({
     }));
     copy[id].answersArray = updatedAnswersArray;
     setAnswersArray(updatedAnswersArray);
-    setAnswersArray(updatedAnswersArray);
+  };
+  
+  const handleUserAnswerSelection = (selectedAnswerIndex: number) => {
+    let copy = [...userGlobalAnswers];
+    const updatedAnswersArray = answersArray.map((answer, index) => ({
+      ...answer,
+      isCorrect: index === selectedAnswerIndex,
+    }));
+    copy[id].answersArray = updatedAnswersArray;
+    setUserGlobalAnswers(copy);
   };
 
   const handleQuestionChange = (e: string) => {
@@ -94,6 +105,8 @@ const SingleChoiceQuestion = ({
     setQuestionValue(e);
     setGlobalQuestionData(copy);
   };
+  
+  const tempQuestionId = questionId || Math.random() * 1000;
 
   const answerLayout = (
     <div className={classes.main}>
@@ -102,12 +115,13 @@ const SingleChoiceQuestion = ({
         <p className={classes.hint}>(wybierz jedno)</p>
       </div>
       <div className={classes.answers}>
-        {answers?.map((answer) => (
+        {userAnswers?.map((answer: any) => (
           <div className={classes.answer} key={answer.id}>
             <input
               type="radio"
-              name={questionId?.toString()}
+              name={tempQuestionId?.toString()}
               id={`question${questionId?.toString()}-${answer.id}`}
+              onChange={() => handleUserAnswerSelection(answer.id - 1)}
             />
             <label htmlFor={`question${questionId?.toString()}-${answer.id}`}>
               {answer.answerContent}
@@ -118,7 +132,6 @@ const SingleChoiceQuestion = ({
     </div>
   );
 
-  const tempQuestionId = questionId || Math.random() * 1000;
 
   const questionLayout = (
     <div className={classes.main}>

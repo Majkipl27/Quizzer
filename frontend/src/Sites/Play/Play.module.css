@@ -1,0 +1,39 @@
+.mainSign {
+  font-size: 3rem;
+  margin-top: 2rem;
+}
+
+.main {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2rem;
+  min-height: 60vh;
+}
+
+.button {
+    width: 420px;
+    margin-bottom: 2rem;
+}
+
+.questions {
+  width: 100%;
+  padding: 2rem;
+  box-sizing: border-box;
+}
+
+.desc {
+  width: 80%;
+  word-break: break-all; 
+}
+
+.questions > div {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding-top: 2rem;
+  gap: 2rem;
+}

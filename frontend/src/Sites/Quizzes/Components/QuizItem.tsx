@@ -7,9 +7,16 @@ interface quizItemProps {
   name: string;
   description: string;
   avatar_id: number;
+  isButton? : boolean;
 }
 
-const QuizItem = ({id, name, description, avatar_id}: quizItemProps) => {
+const QuizItem = ({
+  id,
+  name,
+  description,
+  avatar_id,
+  isButton,
+}: quizItemProps) => {
   const navigate = useNavigate();
 
   function importAll(r: any) {
@@ -30,6 +37,10 @@ const QuizItem = ({id, name, description, avatar_id}: quizItemProps) => {
     )
   );
 
+  if (isButton === undefined) {
+    isButton = true;
+  }
+
   return (
     <div
       className={classes.quiz}
@@ -39,11 +50,13 @@ const QuizItem = ({id, name, description, avatar_id}: quizItemProps) => {
       <div className={classes.quizNav}>
         <h3>{name}</h3>
         <p>{description}</p>
-        <Button
-          text="Rozwiąż quiz"
-          onButtonClick={() => navigate(`/quiz/${id}`)}
-          classname={classes.button}
-        />
+        {isButton && (
+          <Button
+            text="Rozwiąż quiz"
+            onButtonClick={() => navigate(`/quiz/${id}`)}
+            classname={classes.button}
+          />
+        )}
       </div>
     </div>
   );

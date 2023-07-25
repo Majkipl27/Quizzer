@@ -3,6 +3,7 @@ import Header from "./Layout/Header";
 import LandingPage from "./Sites/LandingPage/LandingPage";
 import Quizzes from "./Sites/Quizzes/Quizzes";
 import AddQuiz from "./Sites/AddQuiz/AddQuiz";
+import Play from "./Sites/Play/Play";
 
 const router = createBrowserRouter([
   {
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
       {
         path: "/addquiz",
         element: <AddQuiz />,
+      },
+      {
+        path: "/quiz/:quizId",
+        element: <Play />,
       },
     ],
   },

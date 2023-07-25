@@ -68,12 +68,7 @@ app.post('/add', async (req, res) => {
     for (const data of questions) {
       const { question, question_type, answers } = data;
 
-      if (
-        !question ||
-        !question_type ||
-        !answers ||
-        !Array.isArray(answers)
-      ) {
+      if (!question || !question_type || !answers || !Array.isArray(answers)) {
         return res.status(400).json({ error: 'Nieprawidłowe dane wejściowe.' });
       }
 
@@ -104,6 +99,7 @@ app.post('/add', async (req, res) => {
     res.status(500).json({ error: 'Wystąpił błąd serwera.' });
   }
 });
+
 
 app.get('/quiz/:quizId/questions', async (req: any, res: any) => {
   try {
